@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'Inbox'|trans }}{% endblock %}
+
+{% block body %}
+{{form(form)}}
+{% endblock %}
+
+{% block javascript %}
+<script>
+$('document').ready(function() {
+    alert(1);
+})
+</script>
+{% endblock %}
