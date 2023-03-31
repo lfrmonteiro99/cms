@@ -102,4 +102,19 @@ class Content
 
         return $this;
     }
+
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtAutomatically()
+    {
+        if ($this->getCreatedAt() === null) {
+            $this->setCreatedAt(new \DateTime());
+        }
+    }
 }

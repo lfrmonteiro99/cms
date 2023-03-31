@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Form\ContentType;
 use App\Entity\Content;
+use App\Entity\ContentParameter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping;
@@ -32,6 +33,13 @@ class ContentController extends AbstractController
         ]);
     }
 
+    #[Route('/content/show/{id}', name: 'app_content_show')]
+    public function show($id)
+    {
+        $content = $this->em->getRepository(Content::class)->find($id);
+        return new JsonResponse($content, 200); // constant for 404
+    }
+
     #[Route('/content/create', name: 'app_content_create')]
     public function create(Request $request)
     {
@@ -39,14 +47,25 @@ class ContentController extends AbstractController
         $form = $this->createForm(ContentType::class, $content);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
+            $contentParameters = $request->get('content')['contentParameters'];
+            foreach($contentParameters as $parameter) {
+                $contentParameter = new ContentParameter();
+                $contentParameter->setCode($parameter['code']);
+                $contentParameter->setValue($parameter['value']);
+                $contentParameter->setType($parameter['type']);
+                $content->addContentParameter($contentParameter);
+                $this->em->persist($contentParameter);
+            }
             $slugify = new Slugify();
             $content->setSlug($slugify->slugify($content->getName(), '-'));
             $this->em->persist($content);
             $this->em->flush();
             return $this->redirectToRoute('app_content');
         }
+
         return $this->render('content/create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'content' => $content
         ]);
     }
 
@@ -68,4 +87,5 @@ class ContentController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
 }

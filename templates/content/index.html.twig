@@ -2,6 +2,7 @@
 {% block title %}{{ 'Inbox'|trans }}{% endblock %}
 
 {% block body %}
+<a href="{{ path('app_content_create')}}">Create</a>
 <table>
 <thead>
 <tr>
@@ -17,7 +18,7 @@ Actions
 {% for content in contents %}
 <tr>
 <td>
-{{content.name}}
+<a href="#" class="show" data-id="{{content.id}}">{{content.name}}</a>
 </td>
 <td>
 <span><a href="{{path('app_content_edit', {'id': content.id})}}">Edit</a>
@@ -27,6 +28,22 @@ Actions
 </tbody>
 </table>
 {% endblock %}
-{% block javascripts %}
-
+{% block javascript %}
+<script>
+$('body').on('click', '.show', function() {
+    alert(1)
+    let id = $(this).data('id');
+    let url = "{{ path('app_content_show', {'id': 'id'}) }}";
+    console.log(url);
+    url = url.replace('id', id);
+    console.log(url);
+    $.get( url, function( data ) {
+  console.log(data)
+});
+    return;
+   
+  alert( "Load was performed." );
+//});
+});
+</script>
 {% endblock %}

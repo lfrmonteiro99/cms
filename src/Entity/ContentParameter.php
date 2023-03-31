@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ContentParameterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 #[ORM\Entity(repositoryClass: ContentParameterRepository::class)]
 class ContentParameter
@@ -32,6 +33,11 @@ class ContentParameter
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
+
+    public function __construct()
+    {
+        $this->setCreatedAt(new DateTime());
+    }
 
     public function getId(): ?int
     {
@@ -91,7 +97,7 @@ class ContentParameter
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeInterface $created_at): self
+    public function setCreatedAt(?\DateTimeInterface $created_at = null): self
     {
         $this->created_at = $created_at;
 

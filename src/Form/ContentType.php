@@ -15,6 +15,11 @@ class ContentType extends AbstractType
         $builder
             ->add('name')
             ->add('code')
+            
+            ->add('contentParameters', ContentParameterType::class, [
+                'data_class' => null,
+                'mapped' => false
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Create'
             ]);
@@ -25,6 +30,7 @@ class ContentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Content::class,
+            'allow_extra_fields' => true,
         ]);
     }
 }

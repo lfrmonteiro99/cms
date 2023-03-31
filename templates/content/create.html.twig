@@ -3,12 +3,42 @@
 
 {% block body %}
 {{form(form)}}
+<a class="more">+</a>
 {% endblock %}
 
 {% block javascript %}
 <script>
+let parametersSection = 0;
 $('document').ready(function() {
-    alert(1);
+    $("#content_contentParameters").hide();
+        let inputs = $(`#content_contentParameters`).find('input');
+        inputs.each(function(index, input) {
+            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
+            $(input).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
+        });
+});
+$('body').on('click', '.more', function() {
+    $("#content_contentParameters").show();
+let value = '';
+if(parametersSection <= 1) {
+    value = '';
+} else {
+    value = `_${parametersSection}`;
+}
+
+
+    if(parametersSection > 0) {
+        $("#content_contentParameters").clone().attr('id', `content_contentParameters_${parametersSection}`).insertAfter(`form[name='content'] #content_contentParameters${value}`);
+        let inputs = $(`#content_contentParameters_${parametersSection}`).find('input');
+        inputs.each(function(index, input) {
+            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
+            $(input).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
+        });
+
+    }
+    
+    parametersSection++;
+    
 })
 </script>
 {% endblock %}

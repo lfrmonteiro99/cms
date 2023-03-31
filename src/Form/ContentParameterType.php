@@ -15,9 +15,6 @@ class ContentParameterType extends AbstractType
             ->add('code')
             ->add('type')
             ->add('value')
-            ->add('created_at')
-            ->add('deleted_at')
-            ->add('content_id')
         ;
     }
 
@@ -25,6 +22,7 @@ class ContentParameterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ContentParameter::class,
+            'allow_extra_fields' => true,
         ]);
     }
 }
