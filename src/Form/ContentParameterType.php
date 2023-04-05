@@ -6,8 +6,11 @@ use App\Entity\Content;
 use App\Entity\ContentParameter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+<<<<<<< Updated upstream
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+=======
+>>>>>>> Stashed changes
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormEvent;
@@ -20,6 +23,7 @@ class ContentParameterType extends AbstractType
         $builder
             ->add('code')
             ->add('type', ChoiceType::class, [
+<<<<<<< Updated upstream
                 'choices' => Content::SECTION_TYPES,
                 'attr' => ['class' => 'form-control'],
             ])
@@ -32,6 +36,11 @@ class ContentParameterType extends AbstractType
                 'label' => 'Number of heading',
                 'attr' => ['class' => 'form-control'],
             ])
+=======
+                'choices' => ContentParameter::TYPES
+            ])
+            ->add('value')
+>>>>>>> Stashed changes
         ;
     }
 

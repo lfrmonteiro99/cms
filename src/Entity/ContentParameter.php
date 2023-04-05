@@ -10,6 +10,12 @@ use DateTime;
 #[ORM\Entity(repositoryClass: ContentParameterRepository::class)]
 class ContentParameter
 {
+    public const TYPES = [
+        'select' => 1,
+        'text' => 2,
+        'radio_button' => 3
+    ];
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

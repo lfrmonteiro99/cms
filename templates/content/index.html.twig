@@ -27,18 +27,19 @@ Actions
 {% endfor %}
 </tbody>
 </table>
+<div class="result-show">
+</div>
 {% endblock %}
 {% block javascript %}
 <script>
 $('body').on('click', '.show', function() {
-    alert(1)
     let id = $(this).data('id');
     let url = "{{ path('app_content_show', {'id': 'id'}) }}";
     console.log(url);
     url = url.replace('id', id);
     console.log(url);
     $.get( url, function( data ) {
-  console.log(data)
+        $('.result-show').html(data.response);
 });
     return;
    

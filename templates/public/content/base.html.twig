@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ 'Inbox'|trans }}{% endblock %}
+
+{% block body %}
+{% for content in content.contentParameters %}
+{% if content.type == 'text' %}
+{% include('/public/content/sections/text.html.twig', {'content': 'type'}) %}
+{% endif %}
+{% endfor %}
+{% endblock %}

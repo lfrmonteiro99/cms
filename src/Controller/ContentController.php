@@ -13,7 +13,9 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping;
 use Symfony\Component\HttpFoundation\Request;
 use Cocur\Slugify\Slugify;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
@@ -33,11 +35,40 @@ class ContentController extends AbstractController
         ]);
     }
 
+    #[Route('/content/page/{slug}', name: 'show_slug')]
+    public function showSlug($slug)
+    {
+        $content = $this->em->getRepository(Content::class)->findOneBy(['slug' => $slug]);
+        if(!$content) {
+            throw new Exception("Error Processing Request", 1);
+        }
+        return $this->render('/public/content/base.html.twig', ['content' => $content]);
+
+    }
+
     #[Route('/content/show/{id}', name: 'app_content_show')]
     public function show($id)
     {
         $content = $this->em->getRepository(Content::class)->find($id);
-        return new JsonResponse($content, 200); // constant for 404
+        $contentParametersToReturn = [];
+        foreach($content->getContentParameters() as $key => $value) {
+            $contentParametersToReturn []= [
+                'type' => $value->getType(),
+                'code' => $value->getCode(),
+                'value' => $value->getValue()
+            ];
+        }
+        $contentReturn = [
+            'name' => $content->getName(),
+            'code' => $content->getCode(),
+            'slug' => $content->getSlug(),
+            'contentParameters' => $contentParametersToReturn
+        ];
+        return new JsonResponse(
+            [
+                'response' => $this->render('content/show.html.twig', ['content' => $contentReturn])->getContent()
+            ]
+        );
     }
 
     #[Route('/content/create', name: 'app_content_create')]

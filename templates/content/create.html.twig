@@ -21,6 +21,7 @@ $('document').ready(function() {
             $(input).attr('id', `content_contentParameters_${id}_${parametersSection}`);
         });
 
+<<<<<<< Updated upstream
 });
 
 $('body').on('change', `#content_contentParameters_type_${parametersSection}`, function() {
@@ -33,6 +34,13 @@ $('body').on('change', `#content_contentParameters_type_${parametersSection}`, f
     }else if(type == 2) {
         $(`#content_contentParameters_text_${realValueParametersSection}`).parent().show();
     }
+=======
+        let selects = $(`#content_contentParameters`).find('select');
+        selects.each(function(index, select) {
+            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
+            $(select).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
+        });
+>>>>>>> Stashed changes
 });
 $('body').on('click', '.more', function() {
     $("#content_contentParameters").show();
@@ -56,6 +64,12 @@ if(parametersSection <= 1) {
             console.log(arrayIds, id);
             $(input).attr('name', `content[contentParameters][${parametersSection}][${id}]`);
             $(input).attr('id', `content_contentParameters_${id}_${parametersSection}`);
+        });
+
+        let selects = $(`#content_contentParameters_${parametersSection}`).find('select');
+        selects.each(function(index, select) {
+            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
+            $(select).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
         });
 
     }

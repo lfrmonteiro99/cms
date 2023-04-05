@@ -1,0 +1,22 @@
+<div>
+<div class="form-group">
+<label>Name</label>
+<input type="text" name="name" value="{{content.name}}" />
+</div>
+<div class="form-group">
+<label>Code</label>
+<input type="text" name="name" value="{{content.code}}" />
+</div>
+<div class="form-group">
+<label>Slug</label>
+<input type="text" name="name" value="{{content.slug}}" />
+</div>
+{% for parameter in content.contentParameters %}
+<div class="form-group">
+{% for key,value in parameter %}
+<label>{{key}}</label>
+<input type="text" name="name" value="{{value}}" />
+{% endfor %}
+</div>
+{% endfor %}
+</div>
