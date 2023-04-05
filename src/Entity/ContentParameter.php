@@ -26,7 +26,7 @@ class ContentParameter
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $value = null;
+    private ?string $text = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
@@ -34,9 +34,22 @@ class ContentParameter
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deleted_at = null;
 
+    #[ORM\Column(length: 255)]
+    private string $section_type = '';
+
     public function __construct()
     {
         $this->setCreatedAt(new DateTime());
+    }
+
+    public function getSectionType()
+    {
+        return $this->section_type;
+    }
+
+    public function setSectionType($section_type)
+    {
+        $this->section_type = $section_type;
     }
 
     public function getId(): ?int
@@ -80,14 +93,14 @@ class ContentParameter
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getText(): ?string
     {
-        return $this->value;
+        return $this->text;
     }
 
-    public function setValue(string $value): self
+    public function setText(string $value): self
     {
-        $this->value = $value;
+        $this->text = $value;
 
         return $this;
     }

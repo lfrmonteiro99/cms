@@ -47,6 +47,8 @@ class ContentController extends AbstractController
         $form = $this->createForm(ContentType::class, $content);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
+            dump($request);
+            die;
             $contentParameters = $request->get('content')['contentParameters'];
             foreach($contentParameters as $parameter) {
                 $contentParameter = new ContentParameter();

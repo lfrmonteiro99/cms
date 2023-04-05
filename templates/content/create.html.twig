@@ -11,11 +11,28 @@
 let parametersSection = 0;
 $('document').ready(function() {
     $("#content_contentParameters").hide();
-        let inputs = $(`#content_contentParameters`).find('input');
+    $("#content_contentParameters_text").parent().hide();
+    $("#content_contentParameters_heading").parent().hide();
+        let inputs = $(`#content_contentParameters`).find('input,select');
         inputs.each(function(index, input) {
-            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
-            $(input).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
+            let arrayIds = $(this).attr('id').split('_');
+            let id = arrayIds[arrayIds.length - 1];
+            $(input).attr('name', `content[contentParameters][${parametersSection}][${id}]`);
+            $(input).attr('id', `content_contentParameters_${id}_${parametersSection}`);
         });
+
+});
+
+$('body').on('change', `#content_contentParameters_type_${parametersSection}`, function() {
+    let realValueParametersSection = parametersSection - 1;
+    let type = $(this).val();
+    console.log(type,realValueParametersSection);
+    if(type == 1) {
+        $(`#content_contentParameters_text_${realValueParametersSection}`).parent().show();
+        $(`#content_contentParameters_heading_${realValueParametersSection}`).parent().show();
+    }else if(type == 2) {
+        $(`#content_contentParameters_text_${realValueParametersSection}`).parent().show();
+    }
 });
 $('body').on('click', '.more', function() {
     $("#content_contentParameters").show();
@@ -23,20 +40,25 @@ let value = '';
 if(parametersSection <= 1) {
     value = '';
 } else {
-    value = `_${parametersSection}`;
+    value = `_${parametersSection-1}`;
 }
 
 
     if(parametersSection > 0) {
+        console.log($(`form[name='content'] #content_contentParameters${value}`), `content_contentParameters${value}`)
         $("#content_contentParameters").clone().attr('id', `content_contentParameters_${parametersSection}`).insertAfter(`form[name='content'] #content_contentParameters${value}`);
-        let inputs = $(`#content_contentParameters_${parametersSection}`).find('input');
+        $(`#content_contentParameters_text_${parametersSection}`).parent().show();
+        $(`#content_contentParameters_heading_${parametersSection}`).parent().show();
+        let inputs = $(`#content_contentParameters_${parametersSection}`).find('input,select');
         inputs.each(function(index, input) {
-            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
-            $(input).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
+            let arrayIds = $(this).attr('id').split('_');
+            let id = arrayIds[arrayIds.length - 2];
+            console.log(arrayIds, id);
+            $(input).attr('name', `content[contentParameters][${parametersSection}][${id}]`);
+            $(input).attr('id', `content_contentParameters_${id}_${parametersSection}`);
         });
 
     }
-    
     parametersSection++;
     
 })

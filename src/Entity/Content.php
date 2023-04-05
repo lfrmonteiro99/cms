@@ -10,6 +10,28 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ContentRepository::class)]
 class Content
 {
+    public const PARAMETER_TYPES = [
+        'text' => 1,
+        'select' => 2,
+        'number' => 3
+    ];
+
+    public const SECTION_TYPES = [
+        'heading' => 1,
+        'content' => 2
+    ];
+
+    public const SECTION_PARAMETERS_TYPES = [
+        self::SECTION_TYPES['heading'] => [
+            self::PARAMETER_TYPES['text'],
+            self::PARAMETER_TYPES['number']
+        ],
+        self::SECTION_TYPES['content'] => [
+            self::PARAMETER_TYPES['text']
+        ],
+
+    ];
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

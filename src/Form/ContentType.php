@@ -18,10 +18,13 @@ class ContentType extends AbstractType
             
             ->add('contentParameters', ContentParameterType::class, [
                 'data_class' => null,
-                'mapped' => false
+                'mapped' => false,
+                'label' => 'Parameters',
+                'attr' => ['class' => 'form-control'],
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Create'
+                'label' => 'Create',
+                'attr' => ['class' => 'btn btn-primary'],
             ]);
         ;
     }
