@@ -3,7 +3,7 @@
 
 {% block body %}
 {{form(form)}}
-<a class="more">+</a>
+<a href="#" class="more">+</a>
 {% endblock %}
 
 {% block javascript %}
@@ -23,15 +23,20 @@ $('document').ready(function() {
 
 });
 
-$('body').on('change', `#content_contentParameters_type_${parametersSection}`, function() {
-    let realValueParametersSection = parametersSection - 1;
+$('body').on('change', '.choice-section-type', function() {
+    let contentParametersSectionId = $(this).attr('id').split('_');
+    let numberOfIndexContentParameters = contentParametersSectionId[contentParametersSectionId.length - 1];
+    console.log(numberOfIndexContentParameters);
     let type = $(this).val();
-    console.log(type,realValueParametersSection);
+    console.log(type,numberOfIndexContentParameters);
     if(type == 1) {
-        $(`#content_contentParameters_text_${realValueParametersSection}`).parent().show();
-        $(`#content_contentParameters_heading_${realValueParametersSection}`).parent().show();
+        alert(1);
+        $(`#content_contentParameters_text_${numberOfIndexContentParameters}`).parent().show();
+        $(`#content_contentParameters_heading_${numberOfIndexContentParameters}`).parent().show();
     }else if(type == 2) {
-        $(`#content_contentParameters_text_${realValueParametersSection}`).parent().show();
+        alert(2);
+        $(`#content_contentParameters_text_${numberOfIndexContentParameters}`).parent().show();
+        $(`#content_contentParameters_heading_${numberOfIndexContentParameters}`).parent().hide();
     }
 });
 $('body').on('click', '.more', function() {
@@ -45,7 +50,6 @@ if(parametersSection <= 1) {
 
 
     if(parametersSection > 0) {
-        console.log($(`form[name='content'] #content_contentParameters${value}`), `content_contentParameters${value}`)
         $("#content_contentParameters").clone().attr('id', `content_contentParameters_${parametersSection}`).insertAfter(`form[name='content'] #content_contentParameters${value}`);
         $(`#content_contentParameters_text_${parametersSection}`).parent().show();
         $(`#content_contentParameters_heading_${parametersSection}`).parent().show();
@@ -56,13 +60,10 @@ if(parametersSection <= 1) {
             console.log(arrayIds, id);
             $(input).attr('name', `content[contentParameters][${parametersSection}][${id}]`);
             $(input).attr('id', `content_contentParameters_${id}_${parametersSection}`);
+            $(input).val('');
         });
 
-        let selects = $(`#content_contentParameters_${parametersSection}`).find('select');
-        selects.each(function(index, select) {
-            let name = $(this).parent().find('label').text().toLowerCase().replace(' ', '_');
-            $(select).attr('name', `content[contentParameters][${parametersSection}][${name}]`);
-        });
+      
 
     }
     parametersSection++;

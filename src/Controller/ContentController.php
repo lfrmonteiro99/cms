@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\ContentType;
 use App\Entity\Content;
 use App\Entity\ContentParameter;
+use App\Entity\ParameterValue;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping;
@@ -52,11 +53,21 @@ class ContentController extends AbstractController
         $content = $this->em->getRepository(Content::class)->find($id);
         $contentParametersToReturn = [];
         foreach($content->getContentParameters() as $key => $value) {
+            $parametersValues = [];
+            foreach($value->getParameterValues() as $key => $v) {
+                $parametersValues []= [
+                    'value' => $v->getValue(),
+                    'sectionParameterType' => array_flip(Content::PARAMETER_TYPES)[$v->getSectionParameterType()]
+                ];
+            }
             $contentParametersToReturn []= [
-                'type' => $value->getType(),
+                'type' => $value->getSectionType(),
                 'code' => $value->getCode(),
-                'value' => $value->getValue()
+                'values' => $parametersValues,
+                Content::SECTION_PARAMETERS_TYPES[$value->getType()]
             ];
+
+            
         }
         $contentReturn = [
             'name' => $content->getName(),
@@ -64,6 +75,8 @@ class ContentController extends AbstractController
             'slug' => $content->getSlug(),
             'contentParameters' => $contentParametersToReturn
         ];
+
+        dd($contentReturn);
         return new JsonResponse(
             [
                 'response' => $this->render('content/show.html.twig', ['content' => $contentReturn])->getContent()
@@ -78,14 +91,28 @@ class ContentController extends AbstractController
         $form = $this->createForm(ContentType::class, $content);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            dump($request);
-            die;
             $contentParameters = $request->get('content')['contentParameters'];
             foreach($contentParameters as $parameter) {
                 $contentParameter = new ContentParameter();
                 $contentParameter->setCode($parameter['code']);
-                $contentParameter->setValue($parameter['value']);
                 $contentParameter->setType($parameter['type']);
+                $contentParameter->setSectionType(array_flip(Content::SECTION_TYPES)[$parameter['type']]);
+                if(array_key_exists('heading', $parameter) && array_key_exists('text', $parameter) && !empty($parameter['heading']) && !empty($parameter['text'])) {
+                    $parameterValue1 = new ParameterValue();
+                    $parameterValue1->setValue($parameter['heading']);
+                    $parameterValue1->setSectionParameterType(Content::PARAMETER_TYPES['number']);
+                    $contentParameter->addParameterValue($parameterValue1);
+                    $parameterValue2 = new ParameterValue();
+                    $parameterValue2->setValue($parameter['text']);
+                    $parameterValue2->setSectionParameterType(Content::PARAMETER_TYPES['text']);
+                    $contentParameter->addParameterValue($parameterValue2);
+                } else {
+                    $parameterValue = new ParameterValue();
+                    $parameterValue->setValue($parameter['text']);
+                    $parameterValue->setSectionParameterType(Content::PARAMETER_TYPES['text']);
+                    $contentParameter->addParameterValue($parameterValue);
+                }
+                
                 $content->addContentParameter($contentParameter);
                 $this->em->persist($contentParameter);
             }

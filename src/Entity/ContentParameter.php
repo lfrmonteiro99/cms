@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ContentParameterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
@@ -31,9 +33,6 @@ class ContentParameter
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $text = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
@@ -43,9 +42,13 @@ class ContentParameter
     #[ORM\Column(length: 255)]
     private string $section_type = '';
 
+    #[ORM\OneToMany(mappedBy: 'contentParameter',cascade:["persist"], targetEntity: ParameterValue::class)]
+    private Collection $parameterValues;
+
     public function __construct()
     {
         $this->setCreatedAt(new DateTime());
+        $this->parameterValues = new ArrayCollection();
     }
 
     public function getSectionType()
@@ -99,18 +102,6 @@ class ContentParameter
         return $this;
     }
 
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
-
-    public function setText(string $value): self
-    {
-        $this->text = $value;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
@@ -131,6 +122,36 @@ class ContentParameter
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ParameterValue>
+     */
+    public function getParameterValues(): Collection
+    {
+        return $this->parameterValues;
+    }
+
+    public function addParameterValue(ParameterValue $parameterValue): self
+    {
+        if (!$this->parameterValues->contains($parameterValue)) {
+            $this->parameterValues->add($parameterValue);
+            $parameterValue->setContentParameter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParameterValue(ParameterValue $parameterValue): self
+    {
+        if ($this->parameterValues->removeElement($parameterValue)) {
+            // set the owning side to null (unless already changed)
+            if ($parameterValue->getContentParameter() === $this) {
+                $parameterValue->setContentParameter(null);
+            }
+        }
 
         return $this;
     }

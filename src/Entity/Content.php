@@ -29,7 +29,6 @@ class Content
         self::SECTION_TYPES['content'] => [
             self::PARAMETER_TYPES['text']
         ],
-
     ];
     
     #[ORM\Id]

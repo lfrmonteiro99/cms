@@ -13,8 +13,8 @@
 </div>
 {% for parameter in content.contentParameters %}
 <div class="form-group">
-{% for key,value in parameter %}
-<label>{{key}}</label>
+{% for value in parameter.values %}
+<label>{{value.type}}</label>
 <input type="text" name="name" value="{{value}}" />
 {% endfor %}
 </div>

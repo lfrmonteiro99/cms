@@ -22,16 +22,19 @@ class ContentParameterType extends AbstractType
             ->add('code')
             ->add('type', ChoiceType::class, [
                 'choices' => Content::SECTION_TYPES,
-                'attr' => ['class' => 'form-control'],  
+                'attr' => ['class' => 'form-control choice-section-type'],  
             ])
             ->add('text', TextType::class, [
                 'label' => 'Value to show',
                 'attr' => ['class' => 'form-control'],
+                'mapped' => false,
+                'required' => false,
             ])
             ->add('heading', NumberType::class, [
                 'mapped' => false,
                 'label' => 'Number of heading',
                 'attr' => ['class' => 'form-control'],
+                'required' => false,
             ])
         ;
     }
