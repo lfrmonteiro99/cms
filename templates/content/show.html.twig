@@ -1,22 +1,21 @@
-<div>
+<a href="{{ path('show_slug', {'slug': content.slug}) }}" target="_blank" class="btn btn-primary btn-xs">Preview</a>
 <div class="form-group">
-<label>Name</label>
-<input type="text" name="name" value="{{content.name}}" />
+<label class="form-label">Name</label>
+<input class="form-control" type="text" name="name" value="{{content.name}}" />
 </div>
 <div class="form-group">
-<label>Code</label>
-<input type="text" name="name" value="{{content.code}}" />
+<label class="form-label">Code</label>
+<input class="form-control" type="text" name="name" value="{{content.code}}" />
 </div>
 <div class="form-group">
-<label>Slug</label>
-<input type="text" name="name" value="{{content.slug}}" />
+<label class="form-label">Slug</label>
+<input class="form-control" type="text" name="name" value="{{content.slug}}" />
 </div>
 {% for parameter in content.contentParameters %}
 <div class="form-group">
 {% for value in parameter.values %}
-<label>{{value.type}}</label>
-<input type="text" name="name" value="{{value}}" />
+<label class="form-label">{{parameter.type}}</label>
+<input class="form-control" type="text" name="name" value="{{value.value}}" />
 {% endfor %}
 </div>
 {% endfor %}
-</div>

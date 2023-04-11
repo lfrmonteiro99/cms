@@ -43,7 +43,18 @@ class ContentController extends AbstractController
         if(!$content) {
             throw new Exception("Error Processing Request", 1);
         }
-        return $this->render('/public/content/base.html.twig', ['content' => $content]);
+
+        $contentToReturn = [];
+        foreach($content->getContentParameters() as $contentParameter) {
+            foreach($contentParameter->getParameterValues() as $contentParameterValue) {
+                if($contentParameterValue->getSectionParameterType() == "3") {
+                    $contentToReturn[$contentParameter->getId()][$contentParameter->getSectionType()]['numberHeading'] = $contentParameterValue->getValue();
+                } elseif ($contentParameterValue->getSectionParameterType() == "1") {
+                    $contentToReturn[$contentParameter->getId()][$contentParameter->getSectionType()]['value'] = $contentParameterValue->getValue();
+                }
+            }
+        }
+        return $this->render('/public/content/base.html.twig', ['content' => $contentToReturn]);
 
     }
 
@@ -76,7 +87,6 @@ class ContentController extends AbstractController
             'contentParameters' => $contentParametersToReturn
         ];
 
-        dd($contentReturn);
         return new JsonResponse(
             [
                 'response' => $this->render('content/show.html.twig', ['content' => $contentReturn])->getContent()
@@ -148,4 +158,12 @@ class ContentController extends AbstractController
         ]);
     }
 
+    #[Route('/content/delete/{id}', name: 'app_content_delete')]
+    public function delete(Request $request, $id)
+    {
+        $content = $this->em->getRepository(Content::class)->find($id);
+$this->em->remove($content);
+$this->em->flush();
+return $this->redirectToRoute('app_content');
+    }
 }

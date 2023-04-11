@@ -7,6 +7,7 @@ use App\Entity\ContentParameter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,11 +25,12 @@ class ContentParameterType extends AbstractType
                 'choices' => Content::SECTION_TYPES,
                 'attr' => ['class' => 'form-control choice-section-type'],  
             ])
-            ->add('text', TextType::class, [
+            ->add('text', TextareaType::class, [
                 'label' => 'Value to show',
                 'attr' => ['class' => 'form-control'],
                 'mapped' => false,
                 'required' => false,
+                
             ])
             ->add('heading', NumberType::class, [
                 'mapped' => false,

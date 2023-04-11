@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class ContentType extends AbstractType
 {
@@ -18,9 +19,13 @@ class ContentType extends AbstractType
                 'attr' => ['class' => 'form-control'],
             ])
             ->add('code', TextType::class, [
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control']
             ])
-            
+            ->add('xyz', CKEditorType::class, [
+                'mapped' => false,
+                'attr' => ['class' => 'hidden'],
+                'required' => false
+                ])
             ->add('contentParameters', ContentParameterType::class, [
                 'data_class' => null,
                 'mapped' => false,
@@ -41,4 +46,5 @@ class ContentType extends AbstractType
             'allow_extra_fields' => true,
         ]);
     }
+
 }

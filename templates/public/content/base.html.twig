@@ -2,9 +2,14 @@
 {% block title %}{{ 'Inbox'|trans }}{% endblock %}
 
 {% block body %}
-{% for content in content.contentParameters %}
-{% if content.type == 'text' %}
-{% include('/public/content/sections/text.html.twig', {'content': 'type'}) %}
+{% for parameter in content %}
+{% for index, value in parameter %}
+{% if index == 'heading' %}
+{{ include('public/content/sections/header.html.twig', {'value': value}) }}
 {% endif %}
+{% if index == 'content' %}
+{{ include('public/content/sections/text.html.twig', {'value': value}) }}
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% endblock %}

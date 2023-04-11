@@ -10,10 +10,11 @@
 <script>
 let parametersSection = 0;
 $('document').ready(function() {
+    $('#content_xyz').parent().hide();
     $("#content_contentParameters").hide();
     $("#content_contentParameters_text").parent().hide();
     $("#content_contentParameters_heading").parent().hide();
-        let inputs = $(`#content_contentParameters`).find('input,select');
+        let inputs = $(`#content_contentParameters`).find('input,select,textarea');
         inputs.each(function(index, input) {
             let arrayIds = $(this).attr('id').split('_');
             let id = arrayIds[arrayIds.length - 1];
@@ -30,12 +31,13 @@ $('body').on('change', '.choice-section-type', function() {
     let type = $(this).val();
     console.log(type,numberOfIndexContentParameters);
     if(type == 1) {
-        alert(1);
         $(`#content_contentParameters_text_${numberOfIndexContentParameters}`).parent().show();
+        CKEDITOR.replace(`content[contentParameters][${numberOfIndexContentParameters}][text]`)
+        
         $(`#content_contentParameters_heading_${numberOfIndexContentParameters}`).parent().show();
     }else if(type == 2) {
-        alert(2);
         $(`#content_contentParameters_text_${numberOfIndexContentParameters}`).parent().show();
+        CKEDITOR.replace(`content[contentParameters][${numberOfIndexContentParameters}][text]`)
         $(`#content_contentParameters_heading_${numberOfIndexContentParameters}`).parent().hide();
     }
 });
@@ -48,12 +50,13 @@ if(parametersSection <= 1) {
     value = `_${parametersSection-1}`;
 }
 
-
     if(parametersSection > 0) {
         $("#content_contentParameters").clone().attr('id', `content_contentParameters_${parametersSection}`).insertAfter(`form[name='content'] #content_contentParameters${value}`);
+        $(`#content_contentParameters_text_${parametersSection}`).parent().find('[id^=cke_content_contentParameters_text]').remove();
         $(`#content_contentParameters_text_${parametersSection}`).parent().show();
         $(`#content_contentParameters_heading_${parametersSection}`).parent().show();
-        let inputs = $(`#content_contentParameters_${parametersSection}`).find('input,select');
+        $(`#content_contentParameters_text_${parametersSection}`).parent().find('[id^=cke_content_contentParameters_text]').remove();
+        let inputs = $(`#content_contentParameters_${parametersSection}`).find('input,select,textarea');
         inputs.each(function(index, input) {
             let arrayIds = $(this).attr('id').split('_');
             let id = arrayIds[arrayIds.length - 2];
@@ -61,6 +64,7 @@ if(parametersSection <= 1) {
             $(input).attr('name', `content[contentParameters][${parametersSection}][${id}]`);
             $(input).attr('id', `content_contentParameters_${id}_${parametersSection}`);
             $(input).val('');
+            console.log(parametersSection, $(`#content_contentParameters_text_${parametersSection}`).parent().find('.cke').remove());
         });
 
       
