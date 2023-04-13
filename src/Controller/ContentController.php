@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\ContentType;
 use App\Entity\Content;
 use App\Entity\ContentParameter;
+use App\Entity\Menu;
 use App\Entity\ParameterValue;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -44,6 +45,8 @@ class ContentController extends AbstractController
             throw new Exception("Error Processing Request", 1);
         }
 
+        $menu = $this->em->getRepository(Menu::class)->findAll();
+
         $contentToReturn = [];
         foreach($content->getContentParameters() as $contentParameter) {
             foreach($contentParameter->getParameterValues() as $contentParameterValue) {
@@ -54,7 +57,9 @@ class ContentController extends AbstractController
                 }
             }
         }
-        return $this->render('/public/content/base.html.twig', ['content' => $contentToReturn]);
+
+        $template = $content->getTemplate();
+        return $this->render('/public/'.$template. '/'.$template.'/inner-page.html.twig', ['content' => $contentToReturn, 'menu' => $menu]);
 
     }
 
@@ -129,6 +134,17 @@ class ContentController extends AbstractController
             $slugify = new Slugify();
             $content->setSlug($slugify->slugify($content->getName(), '-'));
             $this->em->persist($content);
+
+            if($request->get('content')['template'] != 4) {
+                $content->setTemplate(array_flip(Content::TEMPLATES)[$request->get('content')['template']]);
+            }
+
+            if(isset($request->get('content')['menu']) && $request->get('content')['menu']) {
+                $menu = new Menu();
+                $menu->setName($content->getId() . ' - '.strtok($content->getName(), ' ')[0]);
+                $menu->setPath($this->generateUrl('show_slug', ['slug' => $content->getSlug()]));
+                $this->em->persist($menu);
+            }
             $this->em->flush();
             return $this->redirectToRoute('app_content');
         }

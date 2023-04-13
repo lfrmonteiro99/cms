@@ -30,6 +30,13 @@ class Content
             self::PARAMETER_TYPES['text']
         ],
     ];
+
+    public const TEMPLATES = [
+        'MyResume' => 1,
+        'iPortfolio' => 2,
+        'Arsha' => 3,
+        'Base' => 4
+    ];
     
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -47,6 +54,9 @@ class Content
 
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $template = 'base';
 
     public function __construct()
     {
@@ -137,5 +147,17 @@ class Content
         if ($this->getCreatedAt() === null) {
             $this->setCreatedAt(new \DateTime());
         }
+    }
+
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(string $template): self
+    {
+        $this->template = $template;
+
+        return $this;
     }
 }

@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ 'Inbox'|trans }}{% endblock %}
-
+{% block menu %}
+{{ include('public/menu.html.twig') }}
+{% endblock %}
 {% block body %}
+
 {% for parameter in content %}
 {% for index, value in parameter %}
 {% if index == 'heading' %}

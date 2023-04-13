@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ContentType extends AbstractType
 {
@@ -20,6 +22,18 @@ class ContentType extends AbstractType
             ])
             ->add('code', TextType::class, [
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('template', ChoiceType::class, [
+                'choices' => Content::TEMPLATES,
+                'mapped' => false,
+                'required' => false,
+                'placeholder' => 'Select a template',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('menu', CheckboxType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'form-check-input']
             ])
             ->add('xyz', CKEditorType::class, [
                 'mapped' => false,
